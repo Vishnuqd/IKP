@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h3 class="mb-3">Submit Assignment</h3>
+  <div class="card">
+    <div class="card-body">
+      <h5>{{ assignment.title }}</h5>
+      <p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+      <p><strong>Question:</strong> {{ assignment.question }}</p>
+      <p><strong>Submission Date:</strong> {{ assignment.submission_date }}</p>
+      <hr>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_file" class="form-label">Upload File</label>
+          {{ form.file }}
+        </div>
+        <button type="submit" class="btn btn-success">Submit Assignment</button>
+        <a href="{% url 'list_assignments' %}" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

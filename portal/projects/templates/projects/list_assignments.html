@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Available Assignments</h2>
+
+  <form method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label for="semester" class="form-label">Semester</label>
+      <select name="semester" id="semester" class="form-select">
+        <option value="">-- All Semesters --</option>
+        {% for sem in semesters %}
+          <option value="{{ sem.id }}" {% if selected_semester == sem.id|stringformat:'s' %}selected{% endif %}>{{ sem.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="subject" class="form-label">Subject</label>
+      <select name="subject" id="subject" class="form-select">
+        <option value="">-- All Subjects --</option>
+        {% for sub in subjects %}
+          <option value="{{ sub.id }}" {% if selected_subject == sub.id|stringformat:'s' %}selected{% endif %}>{{ sub.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4 align-self-end">
+      <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+  </form>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Subject</th>
+        <th>Due Date</th>
+        <th>Submitted</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for info in assignment_info %}
+        <tr>
+          <td>{{ info.assignment.title }}</td>
+          <td>{{ info.assignment.subject.name }}</td>
+          <td>{{ info.assignment.submission_date }}</td>
+          <td>
+            {% if info.submission %}
+              ✅ <a href="{{ info.submission.file.url }}" target="_blank">View</a>
+            {% else %}
+              ❌ Not Submitted
+            {% endif %}
+          </td>
+          <td>
+            {% if not info.submission %}
+              <a href="{% url 'submit_assignment' info.assignment.id %}" class="btn btn-sm btn-success">Submit</a>
+            {% else %}
+              <span class="text-muted">Submitted</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">No assignments found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      View Assignment
+    </li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+<h2>{{ assignment.title }}</h2>
+<p><strong>Semester:</strong> {{ assignment.semester.name }}</p>
+<p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+<p><strong>Question:</strong> {{ assignment.question }}</p>
+<p><strong>Created on:</strong> {{ assignment.date_created }}</p>
+<p><strong>Submission Deadline:</strong> {{ assignment.submission_date }}</p>
+
+<hr>
+<h3>Student Submissions</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>File</th>
+      <th>Submitted At</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for submission in submissions %}
+    <tr>
+      <td>{{ submission.student.username }}</td>
+      <td><a href="{{ submission.file.url }}" target="_blank">Download</a></td>
+      <td>{{ submission.submitted_at }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No submissions yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

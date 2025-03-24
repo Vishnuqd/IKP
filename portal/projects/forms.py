@@ -1,7 +1,7 @@
 # projects/forms.py
 
 from django import forms
-from .models import LectureNote, MainProject, MiniProject, ProjectFile, Semester, QuestionBank, Subject
+from .models import Assignment, AssignmentSubmission, LectureNote, MainProject, MiniProject, ProjectFile, Semester, QuestionBank, Subject
 from users.models import CustomUser
 
 class LectureNoteForm(forms.ModelForm):
@@ -70,3 +70,27 @@ class QuestionBankForm(forms.ModelForm):
         if file.size > 10485760:  # Example: 10MB size limit
             raise forms.ValidationError("File size should not exceed 10MB.")
         return file
+    
+class AssignmentForm(forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ['title', 'semester', 'subject', 'question', 'submission_date']
+
+        widgets = {
+            'submission_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+class AssignmentSubmissionForm(forms.ModelForm):
+    class Meta:
+        model = AssignmentSubmission
+        fields = ['file']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['file'].widget.attrs['class'] = 'form-control'

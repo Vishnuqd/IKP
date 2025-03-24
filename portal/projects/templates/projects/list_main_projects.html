@@ -3,7 +3,32 @@
 {% block content %}
 <div class="container mt-4">
   <h2>Main Projects</h2>
-  <table class="table table-bordered">
+
+  <!-- Filters: Year and Branch -->
+  <form method="GET" class="mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="year" class="form-label">Filter by Year</label>
+            <input type="number" name="year" class="form-control" value="{{ year }}" placeholder="Year">
+        </div>
+        <div class="col-md-4">
+            <label for="branch" class="form-label">Filter by Branch</label>
+            <select name="branch" class="form-select">
+                <option value="">All Branches</option>
+                <option value="mechanical" {% if branch == 'mechanical' %}selected{% endif %}>Mechanical Engineering</option>
+                <option value="computer_science" {% if branch == 'computer_science' %}selected{% endif %}>Computer Science Engineering</option>
+                <option value="civil" {% if branch == 'civil' %}selected{% endif %}>Civil Engineering</option>
+                <option value="electronics" {% if branch == 'electronics' %}selected{% endif %}>Electronics Engineering</option>
+                <option value="electrical" {% if branch == 'electrical' %}selected{% endif %}>Electrical Engineering</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+        </div>
+    </div>
+  </form>
+
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Title</th>
@@ -15,24 +40,34 @@
       </tr>
     </thead>
     <tbody>
-      {% for project in projects %}
-      <tr>
-        <td><a href="{% url 'view_main_project' project.pk %}">{{ project.title }}</td>
-        <td>{{ project.year }}</td>  <!-- Display the year -->
-        <td>{{ project.get_branch_display }}</td>  <!-- Display the branch name -->
-        <td>
-          <!-- Display the names of students associated with the project -->
-          {% for student in project.students.all %}
-            {{ student.username }}{% if not forloop.last %}, {% endif %}
-          {% endfor %}
-        </td>
-        <td>{{ project.date_created|date:"Y-m-d H:i" }}</td>
-        <td>
-          <a href="{% url 'view_main_project' project.pk %}" class="btn btn-sm btn-info">👁 View</a>
-          <a href="{% url 'add_files_to_main_project' project.pk %}" class="btn btn-sm btn-info">Add Files</a>
-          <a href="{% url 'edit_main_project' project.pk %}" class="btn btn-sm btn-warning">Edit</a> <!-- Edit button -->
-        </td>
-      </tr>
+      {% for item in projects_with_access %}
+        <tr>
+          <td><a href="{% url 'view_main_project' item.project.pk %}">{{ item.project.title }}</a></td>
+          <td>{{ item.project.year }}</td>  <!-- Display the year -->
+          <td>{{ item.project.get_branch_display }}</td>  <!-- Display the branch name -->
+          <td>
+            <!-- Display the names of students associated with the project -->
+            {% for student in item.project.students.all %}
+              {{ student.username }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>{{ item.project.date_created|date:"Y-m-d H:i" }}</td>
+          <td>
+            <a href="{% url 'view_main_project' item.project.pk %}" class="btn btn-sm btn-info">👁 View</a>
+
+            <!-- Show the "Add Files" button only if the user is part of the project or is faculty -->
+            {% if item.is_part_of_project or request.user.role == 'faculty' %}
+              <a href="{% url 'add_files_to_main_project' item.project.pk %}" class="btn btn-sm btn-success">Add Files</a>
+            {% else %}
+              <span class="text-muted">No Access</span>
+            {% endif %}
+
+            <!-- Show the "Edit" button only for faculty -->
+            {% if request.user.role == 'faculty' %}
+              <a href="{% url 'edit_main_project' item.project.pk %}" class="btn btn-sm btn-warning">Edit</a> <!-- Edit button -->
+            {% endif %}
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>

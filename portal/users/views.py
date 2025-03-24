@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages  
+from django.contrib import messages
+
+from projects.models import Assignment, LectureNote, MainProject, QuestionBank  
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser
@@ -54,10 +56,28 @@ def user_logout(request):
 @login_required
 def student_dashboard(request):
     """Student Dashboard View"""
-    if not request.user.is_approved:
-        messages.error(request, "Your account is pending approval.")
-        return redirect('home')
-    return render(request, 'users/student_dashboard.html')
+    
+    # Get the projects the student is part of
+    projects = MainProject.objects.filter(students=request.user)
+    
+    # Prepare a list of project IDs the student is part of for the template
+    projects_with_access = []
+    for project in projects:
+        is_part_of_project = project.students.filter(id=request.user.id).exists()
+        projects_with_access.append({'project': project, 'is_part_of_project': is_part_of_project})
+
+    # Get the count of lecture notes and main projects
+    note_count = LectureNote.objects.filter(uploaded_by=request.user).count()
+    main_count = MainProject.objects.filter().count()
+    question_bank_count = QuestionBank.objects.count()
+    assignment_count = Assignment.objects.count()
+    return render(request, 'users/student_dashboard.html', {
+        'projects_with_access': projects_with_access,  # Pass the projects with access info
+        'note_count': note_count,
+        'main_count': main_count,
+        'question_bank_count': question_bank_count,
+        'assignment_count':assignment_count
+    })
 
 @login_required
 def faculty_dashboard(request):

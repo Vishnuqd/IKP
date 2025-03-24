@@ -118,3 +118,25 @@ class ProjectFile(models.Model):
 
 # Connect the method to the FileField
 ProjectFile._meta.get_field('file').upload_to = ProjectFile.get_upload_to
+
+class Assignment(models.Model):
+    title = models.CharField(max_length=255)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    question = models.TextField()
+    submission_date = models.DateField()
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_assignments')
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.subject.name} ({self.semester.name})"
+
+
+class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
+    file = models.FileField(upload_to='uploads/assignment_submissions/')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.username}'s submission for {self.assignment.title}"

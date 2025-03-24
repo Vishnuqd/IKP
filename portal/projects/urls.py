@@ -26,6 +26,12 @@ urlpatterns = [
     path('upload/', views.upload_question_paper, name='upload_question_paper'),
     path('view/', views.view_question_papers, name='view_question_papers'),
     
+    path('assignments/create/', views.create_assignment, name='create_assignment'),
+    path('assignments/faculty/', views.faculty_list_assignments, name='faculty_list_assignments'),
+    path('assignments/<int:pk>/details/', views.view_assignment_detail, name='view_assignment_detail'),
+
+    path('assignments/', views.list_assignments, name='list_assignments'),
+    path('assignments/<int:pk>/submit/', views.submit_assignment, name='submit_assignment'),
 ]
 
 if settings.DEBUG:

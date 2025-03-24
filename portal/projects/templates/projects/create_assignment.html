@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create Assignment</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white text-center">
+          <h4>Create Assignment</h4>
+        </div>
+        <div class="card-body">
+          <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="id_title" class="form-label fw-bold">Title</label>
+              {{ form.title }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_semester" class="form-label fw-bold">Semester</label>
+              {{ form.semester }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_subject" class="form-label fw-bold">Subject</label>
+              {{ form.subject }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_submission_date" class="form-label fw-bold">Submission Date</label>
+              {{ form.submission_date }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_question" class="form-label fw-bold">Assignment Question / Description</label>
+              {{ form.question }}
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100">Create Assignment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('id_semester').addEventListener('change', function () {
+      var semesterId = this.value;
+      var subjectDropdown = document.getElementById('id_subject');
+
+      subjectDropdown.innerHTML = '<option value="">Select Subject</option>';
+
+      if (semesterId) {
+        fetch("/projects/get_subjects/?semester_id=" + semesterId)
+          .then(response => response.json())
+          .then(data => {
+            data.subjects.forEach(function (subject) {
+              var option = document.createElement('option');
+              option.value = subject.id;
+              option.text = subject.name;
+              subjectDropdown.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.log("Error fetching subjects:", error);
+          });
+      }
+    });
+  });
+</script>
+{% endblock %}

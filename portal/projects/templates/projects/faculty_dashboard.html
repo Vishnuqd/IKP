@@ -9,7 +9,7 @@
 {% endblock %}
 {% block content %}
 <h1 class="mb-4">Faculty Dashboard</h1>
-<div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="row row-cols-1 row-cols-md-4 g-4">
   <!-- Lecture Notes Card -->
   <div class="col">
     <a href="{% url 'list_lecture_notes' %}" class="text-decoration-none">
@@ -34,17 +34,28 @@
     </a>
   </div>
 
-  <!-- Mini Projects Card -->
+  <!-- Question Bank Card -->
   <div class="col">
-     <a href="{% url 'upload_question_paper' %}" class="text-decoration-none">
+     <a href="{% url 'view_question_papers' %}" class="text-decoration-none">
       <div class="card text-white bg-success h-100">
         <div class="card-body text-center">
           <h5 class="card-title">Question Bank</h5>
-          <p class="card-text display-6">{{ mini_count }}</p>
+          <p class="card-text display-6">{{ question_bank }}</p>
         </div>
       </div>
     </a>
   </div>
+
+  <div class="col">
+    <a href="{% url 'faculty_list_assignments' %}" class="text-decoration-none">
+      <div class="card text-white bg-danger h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Assignments</h5>
+          <p class="card-text display-6">{{ assignment_count }}</p>
+        </div>
+      </div>
+    </a>    
+ </div>
 </div>
 
 <hr class="my-4">
@@ -59,5 +70,8 @@
   <a href="{% url 'upload_question_paper' %}" class="list-group-item list-group-item-action">
     Upload Question Paper
   </a>
+  <a href="{% url 'create_assignment' %}" class="list-group-item list-group-item-action">
+    Create Assignment
+  </a>  
 </div>
 {% endblock %}

@@ -12,11 +12,57 @@
 {% block content %}
 <div class="container mt-5 text-center">
     <h2>Welcome to the Student Dashboard</h2>
-    <p>Here you can access study materials and project resources.</p>
+    <p>Here you can access study materials, project resources, and uploaded question papers.</p>
 
-    <div class="mt-4">
-        <a href="{% url 'list_all_lecture_notes' %}" class="btn btn-info">View Lecture Notes</a>
-        <a href="{% url 'list_main_projects' %}" class="btn btn-warning">Browse Projects</a>
+    <!-- Tiles for Navigation -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <!-- Question Bank Card -->
+        <div class="col">
+            <a href="{% url 'view_question_papers' %}" class="text-decoration-none">
+                <div class="card text-white bg-info h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Question Bank</h5>
+                        <p class="card-text display-6">{{ question_bank_count }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Lecture Notes Card -->
+        <div class="col">
+            <a href="{% url 'list_all_lecture_notes' %}" class="text-decoration-none">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Lecture Notes</h5>
+                        <p class="card-text display-6">{{ note_count }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Projects Card -->
+        <div class="col">
+            <a href="{% url 'list_main_projects' %}" class="text-decoration-none">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Projects</h5>
+                        <p class="card-text display-6">{{ main_count }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col">
+          <a href="{% url 'list_assignments' %}" class="text-decoration-none">
+            <div class="card text-white bg-warning h-100">
+              <div class="card-body text-center">
+                <h5 class="card-title">Assignments</h5>
+                <p class="card-text display-6"><i class="bi bi-journal-text"></i>{{assignment_count}}</p>
+              </div>
+            </div>
+          </a>
+        </div>
     </div>
-</div>
+
+    </div>
 {% endblock %}
