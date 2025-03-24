@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Upload Lecture Note</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Upload Lecture Note</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label fw-bold">Title</label>
+                            <input type="text" name="title" id="id_title" class="form-control" placeholder="Enter title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label fw-bold">Description</label>
+                            <textarea name="description" id="id_description" class="form-control" rows="3" placeholder="Brief description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_semester" class="form-label fw-bold">Semester</label>
+                            <select name="semester" id="id_semester" class="form-select" required>
+                                
+                                {% for semester in semesters %}
+                                    <option value="{{ semester.id }}">{{ semester.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_subject" class="form-label fw-bold">Subject</label>
+                            <select name="subject" id="id_subject" class="form-select" required>
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_file" class="form-label fw-bold">Upload File</label>
+                            <input type="file" name="file" id="id_file" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("JavaScript loaded");
+
+        document.getElementById('id_semester').addEventListener('change', function() {
+            console.log("Semester dropdown changed");
+
+            var semesterId = this.value;  // Get selected semester id
+            var subjectDropdown = document.getElementById('id_subject');  // Get subject dropdown
+
+            // Clear existing options in subject dropdown
+            subjectDropdown.innerHTML = '<option value="">Select Subject</option>';
+
+            if (semesterId) {
+                console.log("Fetching subjects for semester ID: " + semesterId);  // Check if the correct semester ID is passed
+                // Fetch subjects based on selected semester using the correct URL
+                fetch("/projects/get_subjects/?semester_id=" + semesterId)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Received subjects:", data);  // Log the subjects data
+                        // Populate subject dropdown with the fetched subjects
+                        data.subjects.forEach(function(subject) {
+                            var option = document.createElement('option');
+                            option.value = subject.id;
+                            option.text = subject.name;
+                            subjectDropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.log("Error fetching subjects:", error);  // Handle any errors
+                    });
+            }
+        });
+    });
+</script>
+{% endblock %}

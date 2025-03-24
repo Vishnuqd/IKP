@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create Mini Project</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Create Mini Project</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label fw-bold">Project Title</label>
+                            <input type="text" name="title" id="id_title" class="form-control" placeholder="Enter project title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label fw-bold">Description</label>
+                            <textarea name="description" id="id_description" class="form-control" rows="3" placeholder="Brief project overview"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_subject" class="form-label fw-bold">Subject</label>
+                            <select name="subject" id="id_subject" class="form-select">
+                                {% for subject in form.subject.field.queryset %}
+                                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Group Members</label>
+                            <input type="text" name="student_1" class="form-control mb-2" placeholder="Student 1 Name" required>
+                            <input type="text" name="student_2" class="form-control mb-2" placeholder="Student 2 Name">
+                            <input type="text" name="student_3" class="form-control mb-2" placeholder="Student 3 Name">
+                            <input type="text" name="student_4" class="form-control mb-2" placeholder="Student 4 Name">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Create Mini Project</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

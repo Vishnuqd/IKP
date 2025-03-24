@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Main Projects</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Year</th>
+        <th>Branch</th>
+        <th>Students</th>
+        <th>Date Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in projects %}
+      <tr>
+        <td><a href="{% url 'view_main_project' project.pk %}">{{ project.title }}</td>
+        <td>{{ project.year }}</td>  <!-- Display the year -->
+        <td>{{ project.get_branch_display }}</td>  <!-- Display the branch name -->
+        <td>
+          <!-- Display the names of students associated with the project -->
+          {% for student in project.students.all %}
+            {{ student.username }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </td>
+        <td>{{ project.date_created|date:"Y-m-d H:i" }}</td>
+        <td>
+          <a href="{% url 'view_main_project' project.pk %}" class="btn btn-sm btn-info">👁 View</a>
+          <a href="{% url 'add_files_to_main_project' project.pk %}" class="btn btn-sm btn-info">Add Files</a>
+          <a href="{% url 'edit_main_project' project.pk %}" class="btn btn-sm btn-warning">Edit</a> <!-- Edit button -->
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

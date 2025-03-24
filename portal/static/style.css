@@ -1,0 +1,250 @@
+/* Background Image with Fade Effect */
+body {
+    position: relative;
+    background: url('/static/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    background-color: #f8fafc;
+}
+
+/* Dark overlay to improve readability */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 25, 47, 0.85); /* Navy blue with opacity */
+    backdrop-filter: blur(5px); /* Soft blur effect */
+    z-index: -1;
+}
+.container, .home-content {
+    position: relative;
+    z-index: 1;  /* ✅ Ensures text stays above the overlay */
+}
+/* Centered form container */
+.form-container {
+    background: rgba(17, 34, 64, 0.95); /* Darker navy blue for clarity */
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* Headings */
+h3 {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Form labels */
+.form-label {
+    color: #ffffff; /* White text for better visibility */
+    font-weight: bold;
+    text-align: left;
+    display: block;
+}
+
+/* Input fields */
+.custom-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #3f5efb;
+    border-radius: 6px;
+    background: #0a192f;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+/* Placeholder text */
+.custom-input::placeholder {
+    color: #b0c7e4;
+}
+
+/* Input field focus effect */
+.custom-input:focus {
+    border-color: #64ffda;
+    box-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+}
+
+/* Submit button */
+.custom-btn {
+    background: linear-gradient(135deg, #3f5efb, #5f2c82);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-btn:hover {
+    background: #64ffda;
+    color: #0a192f;
+}
+
+/* Links */
+.custom-link {
+    color: #64ffda;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.custom-link:hover {
+    text-decoration: underline;
+}
+
+/* Alert messages */
+.alert {
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+/* Improve home page content visibility */
+.home-content {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px;
+    background: rgba(10, 25, 47, 0.85);
+    border-radius: 10px;
+    display: inline-block;
+}
+.card {
+    border-radius: 10px !important;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 5px;
+  }
+  /* Global Form Styling */
+.form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Enhance form control elements */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3f5efb;
+    box-shadow: 0 0 5px rgba(63, 94, 251, 0.5);
+}
+
+/* Card Customization */
+.card {
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3f5efb, #5f2c82);
+    border: none;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background: #64ffda;
+    color: #0a192f;
+}
+.breadcrumb-item.active{
+    color: #ff5733 !important;
+    font-weight: bold;
+}
+/* Custom error message styling */
+.custom-error-message {
+    color: red;
+    font-size: 1.5rem;  /* Larger font size */
+    font-weight: bold;
+    background-color: #f8d7da;  /* Light red background */
+    padding: 10px;
+    border-radius: 5px;
+}
+/* Custom styling for the view main project page */
+.view-main-project {
+    background-color: rgba(0, 0, 0, 0.3);  /* Black color with 60% transparency */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Card styling for project files */
+.view-main-project .card {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.view-main-project .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #007bff; /* Blue color for the file type */
+    margin-bottom: 15px;
+}
+
+/* Styling the PDF canvas */
+.view-main-project .pdf-container {
+    max-height: 400px; /* Set fixed height */
+    overflow-y: auto;  /* Allow scrolling if content exceeds height */
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f8f9fa; /* Light background for PDF view */
+    border-radius: 5px;
+}
+
+/* Styling the buttons */
+.view-main-project .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.view-main-project .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.view-main-project .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.view-main-project .img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.view-main-project .card-body {
+    text-align: center;
+    padding: 15px;
+}
+

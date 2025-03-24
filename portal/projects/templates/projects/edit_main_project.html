@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Edit Main Project</h2>
+  <form method="POST" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_title" class="form-label fw-bold">Project Title</label>
+      <input type="text" name="title" id="id_title" class="form-control" value="{{ project.title }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="id_description" class="form-label fw-bold">Description</label>
+      <textarea name="description" id="id_description" class="form-control" rows="3">{{ project.description }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="id_branch" class="form-label fw-bold">Branch</label>
+      <select name="branch" id="id_branch" class="form-select" required>
+        {% for choice, label in project.BRANCH_CHOICES %}
+          <option value="{{ choice }}" {% if project.branch == choice %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">Group Members</label>
+      <div id="id_students" class="mb-3">
+        {{ form.students }}  <!-- Render the students field (Many-to-Many Field) -->
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Update Project</button>
+  </form>
+</div>
+{% endblock %}

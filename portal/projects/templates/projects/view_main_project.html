@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'list_main_projects' %}">Main Projects</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ project.title }}</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 view-main-project">  <!-- Scoped styling with the class view-main-project -->
+  <h2>{{ project.title }}</h2>
+  <p><strong>Branch:</strong> {{ project.get_branch_display }}</p>
+  <p><strong>Year:</strong> {{ project.year }}</p>
+  <p><strong>Description:</strong> {{ project.description }}</p>
+  
+  <h4>Students:</h4>
+  <ul>
+    {% for student in project.students.all %}
+      <li>{{ student.username }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Files Associated with This Project:</h4>
+  <div class="row">
+    {% load custom_filters %}
+    {% for file in project_files %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ file.get_file_type_display }}</h5> <!-- Display file type -->
+
+            {% if file.file.name|endswith:".png" or file.file.name|endswith:".jpg" %}
+              <img src="{{ file.file.url }}" class="img-fluid" alt="{{ file.file.name }}">
+            {% elif file.file.name|endswith:".pdf" %}
+              <div id="pdf-container-{{ file.pk }}" class="pdf-container">
+                <canvas id="pdf-canvas-{{ file.pk }}"></canvas>
+              </div>
+            {% else %}
+              <a href="{{ file.file.url }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
+            {% endif %}
+            <a href="{{ file.file.url }}" class="btn btn-primary btn-sm mt-2" target="_blank">Download</a> <!-- Download button -->
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>  <!-- Include PDF.js library -->
+
+<script>
+  {% for file in project_files %}
+    {% if file.file.name|endswith:".pdf" %}
+      var url = "{{ file.file.url }}";
+      var canvas = document.getElementById('pdf-canvas-{{ file.pk }}');
+      var context = canvas.getContext('2d');
+      var loadingTask = pdfjsLib.getDocument(url);
+
+      loadingTask.promise.then(function(pdf) {
+        console.log('PDF loaded');
+        pdf.getPage(1).then(function(page) {
+          var scale = 1.5;
+          var viewport = page.getViewport({ scale: scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+        });
+      });
+    {% endif %}
+  {% endfor %}
+</script>
+{% endblock %}

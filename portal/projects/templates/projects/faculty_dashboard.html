@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Faculty Dashboard</li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+<h1 class="mb-4">Faculty Dashboard</h1>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <!-- Lecture Notes Card -->
+  <div class="col">
+    <a href="{% url 'list_lecture_notes' %}" class="text-decoration-none">
+    <div class="card text-white bg-info h-100">
+      <div class="card-body text-center">
+        <h5 class="card-title">Lecture Notes</h5>
+        <p class="card-text display-6">{{ note_count }}</p>
+      </div>
+    </div>
+    </a>
+  </div>
+
+  <!-- Main Projects Card -->
+  <div class="col">
+    <a href="{% url 'list_main_projects' %}" class="text-decoration-none">
+      <div class="card text-white bg-primary h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Projects</h5>
+          <p class="card-text display-6">{{ main_count }}</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Mini Projects Card -->
+  <div class="col">
+     <a href="{% url 'upload_question_paper' %}" class="text-decoration-none">
+      <div class="card text-white bg-success h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Question Bank</h5>
+          <p class="card-text display-6">{{ mini_count }}</p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<hr class="my-4">
+<h3>Quick Actions</h3>
+<div class="list-group">
+  <a href="{% url 'upload_lecture_note' %}" class="list-group-item list-group-item-action">
+    Upload Lecture Note
+  </a>
+  <a href="{% url 'create_main_project' %}" class="list-group-item list-group-item-action">
+    Create Project
+  </a>
+  <a href="{% url 'upload_question_paper' %}" class="list-group-item list-group-item-action">
+    Upload Question Paper
+  </a>
+</div>
+{% endblock %}

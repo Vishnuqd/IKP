@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {% if project %} Edit Main Project {% else %} Create Main Project {% endif %}
+    </li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>
+                      {% if project %} Edit Main Project {% else %} Create Main Project {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label fw-bold">Project Title</label>
+                            <input type="text" name="title" id="id_title" class="form-control" placeholder="Enter project title" 
+                            {% if project %} value="{{ project.title }}" {% else %} value="" {% endif %} required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label fw-bold">Description</label>
+                            <textarea name="description" id="id_description" class="form-control" rows="3" placeholder="Brief project overview">
+                                {% if project %}{{ project.description }}{% else %}{% endif %}
+                            </textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_branch" class="form-label fw-bold">Branch</label>
+                            <select name="branch" id="id_branch" class="form-select" required>
+                                {% for choice, label in form.branch.field.choices %}
+                                    <option value="{{ choice }}" {% if project and project.branch == choice %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_year" class="form-label fw-bold">Year</label>
+                            <input type="number" name="year" id="id_year" class="form-control" placeholder="Enter project year (e.g., 2025)"
+                            {% if project %} value="{{ project.year }}" {% else %} value="" {% endif %} required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Group Members</label>
+                            <div id="student_inputs">
+                                <div class="student_input mb-2">
+                                    <select name="students" class="form-select mb-2">
+                                        <option value="">Select Student</option>
+                                        {% for student in students %}
+                                            <option value="{{ student.id }}" {% if student in project.students.all %}selected{% endif %}>{{ student.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm" id="add_student">+ Add Student</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            {% if project %} Update Project {% else %} Create Project {% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('add_student').addEventListener('click', function() {
+        var studentInputs = document.getElementById('student_inputs');
+        var newInput = document.createElement('div');
+        newInput.classList.add('student_input', 'mb-2');
+        newInput.innerHTML = `
+            <select name="students" class="form-select mb-2">
+                <option value="">Select Student</option>
+                {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                {% endfor %}
+            </select>
+        `;
+        studentInputs.appendChild(newInput);
+    });
+</script>
+{% endblock %}

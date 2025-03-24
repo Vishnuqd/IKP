@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Student Dashboard</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Welcome to the Student Dashboard</h2>
+    <p>Here you can access study materials and project resources.</p>
+
+    <div class="mt-4">
+        <a href="{% url 'list_all_lecture_notes' %}" class="btn btn-info">View Lecture Notes</a>
+        <a href="{% url 'list_main_projects' %}" class="btn btn-warning">Browse Projects</a>
+    </div>
+</div>
+{% endblock %}

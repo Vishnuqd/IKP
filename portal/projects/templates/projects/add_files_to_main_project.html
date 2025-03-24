@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Add Files to {{ project.title }}</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+          <label for="file" class="form-label fw-bold">Select File</label>
+          {{ form.file }}
+        </div>
+
+        <div class="mb-4">
+          <label for="file_type" class="form-label fw-bold">File Type</label>
+          {{ form.file_type }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Add File</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
