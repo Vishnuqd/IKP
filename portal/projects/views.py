@@ -167,10 +167,11 @@ def list_main_projects(request):
 def add_files_to_main_project(request, pk):
     main_project = get_object_or_404(MainProject, pk=pk)
     
+    if request.user.role == 'student':
     # Check if the student is part of the project
-    if request.user not in main_project.students.all():
-        messages.error(request, "You are not authorized to add files to this project.")
-        return redirect('student_dashboard')  # Redirect them to the dashboard or appropriate page
+        if request.user not in main_project.students.all():
+            messages.error(request, "You are not authorized to add files to this project.")
+            return redirect('student_dashboard')  # Redirect them to the dashboard or appropriate page
 
     if request.method == 'POST':
         form = ProjectFileForm(request.POST, request.FILES)

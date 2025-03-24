@@ -1,5 +1,12 @@
 {% extends "base.html" %}
-
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create Assignment</li>
+  </ol>
+</nav>
+{% endblock %}
 {% block content %}
 <div class="container mt-5">
   <h2 class="text-center mb-4">Add Files to {{ project.title }}</h2>
