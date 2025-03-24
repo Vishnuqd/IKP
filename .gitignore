@@ -3,6 +3,3 @@ __pycache__/
 impo_commands.txt
 portal.zip
 venv
-db.sqlite3
-media/
-uploads/
